@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  app:
+    image: node:14
+    command: 'npm run start'
+    ports:
+      - '3000:3000'
+    working_dir: '/app'
+    volumes:
+      - './:/app'
+
+  postgres:
+    image: postgres
+    env_file:
+      - '.env'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'pgdata:/var/lib/postgresql/data'
+      #copy sql script to ceate schemma, tables and demo data
+      #- ./scripts/init-data.sql:/docker-entrypoint-initdb.d/init-data.sql
+
+volumes:
+  pgdata:
