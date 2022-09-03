@@ -7,23 +7,22 @@ import {
   Param,
   Patch,
   Post,
-  UseGuards,
 } from '@nestjs/common';
 import { CreateOrderDto } from '../../models/create-order.dto';
 import { UpdateOrderDto } from '../../models/update-order.dto';
 import { Order } from '../../models/order.entity';
 import { OrderService } from '../../services/order/order.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
-@Controller('order')
+@Controller('api/orders')
 export class OrderController {
   constructor(private ordeService: OrderService) {}
 
-  @Get('/')
+  @Get('')
   findAll() {
     return this.ordeService.findAll();
   }
 
-  @Get('/:orderId')
+  @Get(':orderId')
   findOneById(@Param('orderId') orderId: number) {
     const data = this.ordeService.findOneById(orderId);
     if (!data) {
@@ -37,7 +36,7 @@ export class OrderController {
     return this.ordeService.create(dto);
   }
 
-  @Patch('orderId')
+  @Patch(':orderId')
   update(
     @Param('orderId') orderId: number,
     @Body() dto: UpdateOrderDto,
@@ -45,8 +44,8 @@ export class OrderController {
     return this.ordeService.update(orderId, dto);
   }
 
-  @Delete()
-  delete(@Param('orderId') orderId: number): Promise<DeleteResult> {
+  @Delete(':orderId')
+  delete(@Param(':orderId') orderId: number): Promise<DeleteResult> {
     return this.ordeService.delete(orderId);
   }
 }

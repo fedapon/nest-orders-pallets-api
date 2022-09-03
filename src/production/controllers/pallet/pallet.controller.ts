@@ -14,16 +14,16 @@ import { Pallet } from '../../models/pallet.entity';
 import { PalletService } from '../../services/pallet/pallet.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
 
-@Controller('pallet')
+@Controller('api/pallets')
 export class PalletController {
   constructor(private palletService: PalletService) {}
 
-  @Get('/')
+  @Get()
   findAll() {
     return this.palletService.findAll();
   }
 
-  @Get('/:orderId')
+  @Get(':orderId')
   findOneById(@Param('palletId') palletId: number) {
     const data = this.palletService.findOneById(palletId);
     if (!data) {
@@ -37,7 +37,7 @@ export class PalletController {
     return this.palletService.create(dto);
   }
 
-  @Patch('palletId')
+  @Patch(':palletId')
   update(
     @Param('palletId') orderId: number,
     @Body() dto: UpdatePalletDto,
@@ -45,7 +45,7 @@ export class PalletController {
     return this.palletService.update(orderId, dto);
   }
 
-  @Delete('palletId')
+  @Delete(':palletId')
   delete(@Param('palletId') palletId: number): Promise<DeleteResult> {
     return this.palletService.delete(palletId);
   }
