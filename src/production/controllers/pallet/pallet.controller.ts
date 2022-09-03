@@ -13,7 +13,10 @@ import { UpdatePalletDto } from '../../models/update-pallet.dto';
 import { Pallet } from '../../models/pallet.entity';
 import { PalletService } from '../../services/pallet/pallet.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { ApiBody, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Pallets')
+@ApiExtraModels(Pallet)
 @Controller('api/pallets')
 export class PalletController {
   constructor(private palletService: PalletService) {}
@@ -33,11 +36,13 @@ export class PalletController {
   }
 
   @Post()
+  @ApiBody({ type: CreatePalletDto })
   create(@Body() dto: CreatePalletDto): Promise<Pallet> {
     return this.palletService.create(dto);
   }
 
   @Patch(':palletId')
+  @ApiBody({ type: UpdatePalletDto })
   update(
     @Param('palletId') orderId: number,
     @Body() dto: UpdatePalletDto,

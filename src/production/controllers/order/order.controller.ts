@@ -13,6 +13,8 @@ import { UpdateOrderDto } from '../../models/update-order.dto';
 import { Order } from '../../models/order.entity';
 import { OrderService } from '../../services/order/order.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { ApiBody, ApiTags } from '@nestjs/swagger';
+@ApiTags('Orders')
 @Controller('api/orders')
 export class OrderController {
   constructor(private ordeService: OrderService) {}
@@ -32,11 +34,13 @@ export class OrderController {
   }
 
   @Post()
+  @ApiBody({ type: CreateOrderDto })
   create(@Body() dto: CreateOrderDto): Promise<Order> {
     return this.ordeService.create(dto);
   }
 
   @Patch(':orderId')
+  @ApiBody({ type: UpdateOrderDto })
   update(
     @Param('orderId') orderId: number,
     @Body() dto: UpdateOrderDto,
