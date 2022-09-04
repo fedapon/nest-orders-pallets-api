@@ -1,12 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsDecimal, IsNotEmpty } from 'class-validator';
+import { IsNotEmpty, IsNumber } from 'class-validator';
 
 export class CreateOrderDto {
   @ApiProperty({
     example: 100,
   })
   @IsNotEmpty()
-  @IsDecimal()
+  @IsNumber()
   productNumber: number;
 
   @ApiProperty({
@@ -19,6 +19,6 @@ export class CreateOrderDto {
     example: 1,
   })
   @IsNotEmpty()
-  @IsDecimal()
+  @IsNumber()
   machineNumber: number;
 }

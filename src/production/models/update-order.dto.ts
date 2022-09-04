@@ -1,12 +1,12 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDecimal, IsOptional } from 'class-validator';
+import { IsNumber, IsOptional } from 'class-validator';
 
 export class UpdateOrderDto {
   @ApiPropertyOptional({
     example: 100,
   })
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   productNumber?: number;
 
   @ApiPropertyOptional({
@@ -19,20 +19,22 @@ export class UpdateOrderDto {
     example: 1,
   })
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   machineNumber?: number;
 
   @ApiPropertyOptional({
     example: 0,
+    type: String,
   })
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   status?: number;
 
   @ApiPropertyOptional({
     example: 0,
+    type: String,
   })
   @IsOptional()
-  @IsDecimal()
+  @IsNumber()
   readed?: number;
 }
