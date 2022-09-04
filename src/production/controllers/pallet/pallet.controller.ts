@@ -69,7 +69,11 @@ export class PalletController {
   }
 
   @Delete(':palletId')
-  delete(@Param('palletId') palletId: number): Promise<DeleteResult> {
+  async delete(@Param('palletId') palletId: number): Promise<DeleteResult> {
+    const pallet = await this.palletService.findOneById(palletId);
+    if (!pallet) {
+      throw new NotFoundException('palletId not found');
+    }
     return this.palletService.delete(palletId);
   }
 }
