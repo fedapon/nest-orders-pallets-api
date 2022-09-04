@@ -12,6 +12,7 @@ import { CreatePalletDto } from '../../models/create-pallet.dto';
 import { UpdatePalletDto } from '../../models/update-pallet.dto';
 import { Pallet } from '../../models/pallet.entity';
 import { PalletService } from '../../services/pallet/pallet.service';
+import { OrderService } from '../../services/order/order.service';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { ApiBody, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 
@@ -19,35 +20,52 @@ import { ApiBody, ApiExtraModels, ApiTags } from '@nestjs/swagger';
 @ApiExtraModels(Pallet)
 @Controller('api/pallets')
 export class PalletController {
-  constructor(private palletService: PalletService) {}
+  constructor(
+    private palletService: PalletService,
+    private orderService: OrderService,
+  ) {}
 
   @Get()
   findAll() {
     return this.palletService.findAll();
   }
 
-  @Get(':orderId')
-  findOneById(@Param('palletId') palletId: number) {
-    const data = this.palletService.findOneById(palletId);
-    if (!data) {
-      throw new NotFoundException();
+  @Get(':palletId')
+  async findOneById(@Param('palletId') palletId: number) {
+    const pallet = await this.palletService.findOneById(palletId);
+    if (!pallet) {
+      throw new NotFoundException('palletId not found');
     }
-    return data;
+    return pallet;
   }
 
   @Post()
   @ApiBody({ type: CreatePalletDto })
-  create(@Body() dto: CreatePalletDto): Promise<Pallet> {
+  async create(@Body() dto: CreatePalletDto): Promise<Pallet> {
+    const order = await this.orderService.findOneById(Number(dto.orderId));
+    if (!order) {
+      throw new NotFoundException('orderId not found');
+    }
     return this.palletService.create(dto);
   }
 
   @Patch(':palletId')
   @ApiBody({ type: UpdatePalletDto })
-  update(
-    @Param('palletId') orderId: number,
+  async update(
+    @Param('palletId') palletId: number,
     @Body() dto: UpdatePalletDto,
   ): Promise<UpdateResult> {
-    return this.palletService.update(orderId, dto);
+    const pallet = await this.palletService.findOneById(palletId);
+    if (!pallet) {
+      throw new NotFoundException('palletId not found');
+    }
+    if (dto.orderId) {
+      const order = await this.orderService.findOneById(Number(dto.orderId));
+      if (!order) {
+        throw new NotFoundException('orderId not found');
+      }
+    }
+    return this.palletService.update(palletId, dto);
   }
 
   @Delete(':palletId')
