@@ -12,11 +12,18 @@ export class PalletService {
   ) {}
 
   async findAll(): Promise<Pallet[] | undefined> {
-    return await this.repository.find();
+    return await this.repository.find({
+      relations: ['orderId'],
+    });
   }
 
   async findOneById(palletId: number): Promise<Pallet | undefined> {
-    return await this.repository.findOneBy({ palletId });
+    return await this.repository.findOne({
+      where: {
+        palletId,
+      },
+      relations: ['orderId'],
+    });
   }
 
   async create(dto: CreatePalletDto): Promise<Pallet> {
