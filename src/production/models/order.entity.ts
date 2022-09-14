@@ -3,8 +3,10 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Pallet } from './pallet.entity';
 
 @Entity({ name: 'orders' })
 export class Order {
@@ -65,4 +67,7 @@ export class Order {
     default: 0,
   })
   readed: number;
+
+  @OneToMany(() => Pallet, (pallet) => pallet.orderId)
+  pallets: Pallet[];
 }

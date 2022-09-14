@@ -14,7 +14,12 @@ export class OrderService {
   }
 
   async findOneById(orderId: number): Promise<Order | undefined> {
-    return await this.repository.findOneBy({ orderId });
+    return await this.repository.findOne({
+      where: {
+        orderId,
+      },
+      relations: ['pallets'],
+    });
   }
 
   async create(dto: CreateOrderDto): Promise<Order> {
